@@ -39,9 +39,9 @@ for i, path in enumerate(paths):
 
     df = clip.to_dataframe().reset_index()
     df_list.append(df)
-
+    
 dfs = pd.concat(df_list, ignore_index=True)
-dfg = dfs.groupby('time').agg('mean').reset_index()
+dfg = dfs.groupby('time').agg('mean')
 dfg['angle'] = [mpcalc.wind_direction(u*units('m/s'), v*units('m/s'), convention='to').m for u, v in zip(dfg['uo'], dfg['vo'])]
 # dfg['direction'] = [mpcalc.angle_to_direction(ang, full=True, level=1) for ang in dfg['angle']]
 dfg.to_csv('kepri_current_mean.csv')
@@ -49,26 +49,4 @@ dfg.to_csv('kepri_current_mean.csv')
 dfg = pd.read_csv('kepri_current_mean.csv')
 dfg['direction'] = [mpcalc.angle_to_direction(ang, full=True, level=1) for ang in dfg['angle']]
 dfg.to_csv('kepri_current_mean.csv')
-# data = data.squeeze('depth')
-
-# x, y = data['uo'].metpy.coordinates('x','y')
-# time = data['uo'].metpy.time
-# data_crs = data['uo'].metpy.cartopy_crs
-
-# fig, ax = plt.subplots(subplot_kw={'projection': data_crs})
-
-# ax.add_feature(cfeature.LAND.with_scale('50m'), facecolor=cfeature.COLORS['land'])
-# ax.add_feature(cfeature.OCEAN.with_scale('50m'), facecolor=cfeature.COLORS['water'])
-
-# Q = ax.quiver(x, y, data['uo'], data['vo'])
-
-# ax.set_extent([103, 107, -0.35, 2.5])
-
-# gl = ax.gridlines(draw_labels=True)
-# gl.xlabels_top = False
-# gl.ylabels_right = False
-
-# ax.set_title('Current direction at '
-#              + time.dt.strftime('%Y-%m').item())
-# plt.show()
 
